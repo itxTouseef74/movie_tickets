@@ -1,0 +1,108 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-19 14:18:57.181861",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_gcne",
+  "column_break_chkk",
+  "movie",
+  "show",
+  "date",
+  "number_of_tickets",
+  "theater",
+  "amended_from",
+  "selected_seats"
+ ],
+ "fields": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "number_of_tickets",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Number of tickets",
+   "reqd": 1
+  },
+  {
+   "fieldname": "show",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Show",
+   "options": "Theater Show",
+   "reqd": 1
+  },
+  {
+   "fieldname": "theater",
+   "fieldtype": "Link",
+   "label": "Theater",
+   "options": "Movie Theater",
+   "read_only": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "movie",
+   "fieldtype": "Link",
+   "label": "Movie",
+   "options": "Movie"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Ticket Booking",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_gcne",
+   "fieldtype": "Section Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_chkk",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "selected_seats",
+   "fieldtype": "JSON",
+   "label": "Selected Seats"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-07-23 16:51:46.989198",
+ "modified_by": "Administrator",
+ "module": "Movie Tickets",
+ "name": "Ticket Booking",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_views": 1
+}
