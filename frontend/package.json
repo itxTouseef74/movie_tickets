@@ -9,8 +9,10 @@
     "copy-html-entry": "cp ../movie_tickets/public/frontend/index.html ../movie_tickets/www/frontend.html"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^4.1.0",
     "feather-icons": "^4.28.0",
     "frappe-ui": "^0.1.0-alpha.12",
+    "jsbarcode": "^3.11.6",
     "jspdf": "^2.5.1",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12"

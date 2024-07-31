@@ -10,7 +10,8 @@
   "director",
   "poster",
   "release_date",
-  "synopsis"
+  "synopsis",
+  "price_per_ticket"
  ],
  "fields": [
   {
@@ -46,11 +47,16 @@
    "in_list_view": 1,
    "label": "Release Date",
    "reqd": 1
+  },
+  {
+   "fieldname": "price_per_ticket",
+   "fieldtype": "Currency",
+   "label": "Price per Ticket"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-23 16:28:23.392573",
+ "modified": "2024-07-31 15:27:35.146223",
  "modified_by": "Administrator",
  "module": "Movie Tickets",
  "name": "Movie",

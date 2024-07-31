@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "field:theater",
  "creation": "2024-07-19 14:13:01.837127",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,7 +16,8 @@
    "in_list_view": 1,
    "label": "Theater",
    "options": "Movie Theater",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "start_time",
@@ -27,10 +29,11 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-22 20:03:40.638394",
+ "modified": "2024-07-26 15:37:13.997941",
  "modified_by": "Administrator",
  "module": "Movie Tickets",
  "name": "Theater Show",
+ "naming_rule": "By fieldname",
  "owner": "Administrator",
  "permissions": [
   {
