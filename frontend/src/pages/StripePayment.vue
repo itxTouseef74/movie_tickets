@@ -100,14 +100,19 @@ async function handleSubmit() {
         }),
     });
 
-     await response.json();
-        paymentSuccess.value = true;
-        paymentError.value = "";
-        
-        setTimeout(() => {
-            router.push('/confirmation'); 
-        }, 2000);
-    
+    setTimeout(() => {
+    router.push({
+        path: '/confirmation',
+        query: {
+            movieName: props.movieName,
+            show: props.bookingData.show,
+            numberOfSeats: props.bookingData.numberOfSeats,
+            selectedSeats: JSON.stringify(props.bookingData.selectedSeats),
+            date: props.bookingData.date,
+            paidAmount:props.price 
+        }
+    });
+}, 2000);
 
     isProcessing.value = false;
 }

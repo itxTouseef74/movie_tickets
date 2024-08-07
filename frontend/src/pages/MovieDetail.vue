@@ -114,18 +114,8 @@
     </div>
 
 
-      <div v-else-if="currentStep === 5">
-        <div class="w-full flex items-center flex-col mt-7">
-          <h1 class="text-[110px]">🍿</h1>
-          <h2 class="font-medium text-xl mt-7 text-gray-900">
-            Enjoy the movie!
-          </h2>
-        </div>
-      </div>
     </div>
     
-
-
     
     <!-- Navigation Buttons -->
     <div class="flex flex-row mt-6 space-x-2">
@@ -153,7 +143,7 @@
 import { ref, reactive, computed } from "vue";
 import { createDocumentResource, createListResource } from "frappe-ui";
 import StripePayment from "./StripePayment.vue";
-import jsPDF from "jspdf";
+
 
 
 const props = defineProps({
@@ -226,6 +216,7 @@ const bookingData = reactive({
   show: null,
 });
 
+
 function goToStep5() {
     currentStep.value = 5;
 }
@@ -269,40 +260,14 @@ function handleNextClick() {
   if (currentStep.value === 3) {
     currentStep.value++;
   } else if (currentStep.value === 4) {
-generateQRCode();
-downloadPDF();
+
   } else {
     currentStep.value++;
   }
 }
 
-function generateQRCode() {
-  const qrData = {
-    payment_method: paymentMethod.id,
-            amount: props.price * 100, 
-            movieName: props.movieName,
-            show_id: props.bookingData.show,
-            number_of_tickets: props.bookingData.numberOfSeats,
-            selected_seats: props.bookingData.selectedSeats.join(','), 
-            date: props.bookingData.date,
-  };
-  const qrDataString = encodeURIComponent(JSON.stringify(qrData));
-  barcodeUrl.value = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrDataString}`;
-}
 
 
-
-function downloadPDF() {
-  const doc = new jsPDF();
-  doc.text(`Movie: ${props.movieName}`, 10, 10);
-  doc.text(`Date: ${bookingData.date}`, 10, 20);
-  doc.text(`Show: ${bookingData.show}`, 10, 30);
-  doc.text(`Number of Tickets: ${bookingData.numberOfSeats}`, 10, 40);
-  doc.text(`Selected Seats: ${bookingData.selectedSeats.join(", ")}`, 10, 50);
-  doc.save("booking-details.pdf");
-}
-
-const barcodeUrl = ref("");
 
 </script>
 
