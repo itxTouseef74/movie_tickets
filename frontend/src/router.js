@@ -18,7 +18,13 @@ const routes = [
     path: '/movies/:movieName',
     component: () => import('@/pages/MovieDetail.vue'),
     props: true,
-  }
+  },
+  {
+    path: '/confirmation',
+    name: 'Confirmation',
+    component: () => import('@/pages/BookingConfirmation.vue'),
+    props: (route) => ({ bookingData: route.query })
+  },
 ]
 
 let router = createRouter({

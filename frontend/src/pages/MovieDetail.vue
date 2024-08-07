@@ -1,43 +1,45 @@
 <template>
   <div v-if="!movieResource.loading && movieResource.doc">
-    <!-- Movie Information Section -->
     <h1 class="text-gray-900 font-bold text-[32px]">{{ movieDoc.title }}</h1>
     <div class="mt-11 flex flex-row items-center justify-between">
       <div class="flex flex-col space-y-3">
         <h2 class="text-gray-700 text-base font-bold uppercase">Director</h2>
-        <h2 class="text-gray-600 text-xl font-semibold">{{ movieDoc.director }}</h2>
+        <p class="text-gray-600 text-xl font-semibold">
+          {{ movieDoc.director }}
+        </p>
       </div>
+
       <div class="flex flex-col space-y-3">
-        <h2 class="text-gray-700 text-base font-bold uppercase">Release Date</h2>
-        <h2 class="text-gray-600 text-xl font-semibold">{{ movieDoc.release_date }}</h2>
+        <h2 class="text-gray-700 text-base font-bold uppercase">
+          Release Date
+        </h2>
+        <p class="text-gray-600 text-xl font-semibold">
+          {{ movieDoc.release_date }}
+        </p>
       </div>
     </div>
 
-    <!-- Booking Steps -->
     <div class="max-w-full">
       <div class="mx-12" v-if="currentStep === 0">
-        <!-- Movie Poster and Button -->
-        <div class="flex justify-center mt-7">
-          <div class="bg-white shadow-2xl rounded p-1">
-            <img
-              :src="movieDoc.poster"
-              alt="Movie Poster"
-              class="w-80 h-70 object-cover rounded"
-            />
-          </div>
+        <div class="p-2 mt-7 bg-white shadow-2xl rounded">
+          <img :src="movieDoc.poster" alt="Movie Poster" />
         </div>
+
         <div class="w-full flex items-center justify-center mt-7">
           <Button size="xl" variant="solid" @click="currentStep++">Book Tickets</Button>
         </div>
-        <div class="flex flex-col space-y-3 mt-14">
+
+        <div class="flex flex-col space-y-3 mt-16">
           <h2 class="text-gray-700 text-base font-bold uppercase">Synopsis</h2>
-          <h2 class="text-gray-600 text-lg font-normal">{{ movieDoc.synopsis }}</h2>
+          <p class="text-gray-600 text-lg font-normal">
+            {{ movieDoc.synopsis }}
+          </p>
         </div>
       </div>
 
       <div v-else-if="currentStep === 1">
-        <!-- Number of Seats Selection -->
         <h2 class="font-medium text-xl mt-7 text-gray-900">How many seats?</h2>
+
         <div class="flex flex-col w-full space-y-5 mt-6">
           <Button
             size="lg"
@@ -51,12 +53,12 @@
       </div>
 
       <div v-else-if="currentStep === 2">
-        <!-- Date and Show Selection -->
         <div class="flex flex-col space-y-4">
           <h2 class="font-medium text-xl mt-7 text-gray-900">Date</h2>
           <input type="date" v-model="bookingData.date" />
 
           <h2 class="font-medium text-xl mt-7 text-gray-900">Cinema & Show</h2>
+
           <div class="space-y-2">
             <div
               class="bg-white shadow-xl p-4 rounded flex flex-col space-y-4"
@@ -66,8 +68,6 @@
               <h3 class="text-sm font-bold text-gray-800">{{ theater }}</h3>
               <div class="flex flex-row space-x-2">
                 <Button
-                  size="sm"
-                  :variant="show.name === bookingData.show ? 'subtle' : 'outline'"
                   @click="bookingData.show = show.name"
                   :key="show.name"
                   v-for="show in theaters.data[theater]"
@@ -95,29 +95,36 @@
                   : seat[1] === 'Selected'
                   ? 'bg-blue-600'
                   : 'bg-gray-300',
-                hasSelectedCorrectNumberOfSeats ? 'cursor-not-allowed' : 'cursor-pointer',
+                hasSelectedCorrectNumberOfSeats
+                  ? 'cursor-not-allowed'
+                  : 'cursor-pointer',
               ]"
-            >
-            </span>
+            ></span>
           </div>
         </div>
       </div>
 
-      <div v-else-if="currentStep === 4">
-        <!-- Confirmation and QR Code -->
+      <div v-if="currentStep === 4">
+      <!-- Integrate StripePayment Component -->
+      <StripePayment 
+        :price="movieDoc.price_per_ticket * bookingData.numberOfSeats" 
+        :movieName="props.movieName"
+        :bookingData="bookingData"
+        @payment-success="goToStep5"/>
+    </div>
+
+
+      <div v-else-if="currentStep === 5">
         <div class="w-full flex items-center flex-col mt-7">
           <h1 class="text-[110px]">🍿</h1>
-          <h2 class="font-medium text-xl mt-7 text-gray-900">Enjoy the movie!</h2>
-
-          <img :src="barcodeUrl" alt="QR Code" class="mt-4 w-64 h-64" v-if="barcodeUrl" />
-
-          <Button size="lg" variant="solid" class="mt-4" @click="downloadPDF"
-            >Download PDF</Button
-          >
+          <h2 class="font-medium text-xl mt-7 text-gray-900">
+            Enjoy the movie!
+          </h2>
         </div>
       </div>
     </div>
     
+
 
     
     <!-- Navigation Buttons -->
@@ -129,11 +136,12 @@
         @click="currentStep--"
         >Go Back</Button
       >
+
       <Button
-        size="lg"
-        variant="solid"
         v-if="currentStep !== 0 && currentStep !== 4"
         :disabled="!nextButtonEnabled"
+        size="lg"
+        variant="solid"
         @click="handleNextClick()"
         >Next</Button
       >
@@ -144,7 +152,9 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { createDocumentResource, createListResource } from "frappe-ui";
+import StripePayment from "./StripePayment.vue";
 import jsPDF from "jspdf";
+
 
 const props = defineProps({
   movieName: {
@@ -168,6 +178,7 @@ const theaters = createListResource({
   onSuccess(doc) {
     console.log("Theater shows fetched successfully", doc);
   },
+
   auto: true,
   transform: (shows) => {
     const groupedShows = {};
@@ -206,7 +217,7 @@ const seatStructure = reactive(
   getSeatStructure(["A", "B", "C", "D", "E"], [1, 2, 3, 4, 5, 6, 7])
 );
 
-const currentStep = ref(0);
+const currentStep = ref(0)
 const today = new Date().toISOString().split("T")[0];
 const bookingData = reactive({
   numberOfSeats: 0,
@@ -214,6 +225,10 @@ const bookingData = reactive({
   date: today,
   show: null,
 });
+
+function goToStep5() {
+    currentStep.value = 5;
+}
 
 function setNumberOfSeats(n) {
   bookingData.numberOfSeats = n;
@@ -248,16 +263,14 @@ const nextButtonEnabled = computed(() => {
   return false;
 });
 
+
+
 function handleNextClick() {
   if (currentStep.value === 3) {
-    movieBooking.insert.submit({
-      movie: props.movieName,
-      date: bookingData.date,
-      show: bookingData.show,
-      selected_seats: JSON.stringify(bookingData.selectedSeats),
-      number_of_tickets: bookingData.numberOfSeats,
-    });
-    generateQRCode();
+    currentStep.value++;
+  } else if (currentStep.value === 4) {
+generateQRCode();
+downloadPDF();
   } else {
     currentStep.value++;
   }
@@ -265,11 +278,13 @@ function handleNextClick() {
 
 function generateQRCode() {
   const qrData = {
-    movie: props.movieName,
-    date: bookingData.date,
-    show: bookingData.show,
-    selected_seats: bookingData.selectedSeats.join(","),
-    number_of_tickets: bookingData.numberOfSeats,
+    payment_method: paymentMethod.id,
+            amount: props.price * 100, 
+            movieName: props.movieName,
+            show_id: props.bookingData.show,
+            number_of_tickets: props.bookingData.numberOfSeats,
+            selected_seats: props.bookingData.selectedSeats.join(','), 
+            date: props.bookingData.date,
   };
   const qrDataString = encodeURIComponent(JSON.stringify(qrData));
   barcodeUrl.value = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrDataString}`;
@@ -288,6 +303,7 @@ function downloadPDF() {
 }
 
 const barcodeUrl = ref("");
+
 </script>
 
 <style scoped>

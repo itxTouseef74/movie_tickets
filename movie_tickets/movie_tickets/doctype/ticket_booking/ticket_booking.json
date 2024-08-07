@@ -14,7 +14,10 @@
   "number_of_tickets",
   "theater",
   "amended_from",
-  "selected_seats"
+  "selected_seats",
+  "payment_method",
+  "amount",
+  "payment_status"
  ],
  "fields": [
   {
@@ -76,12 +79,27 @@
    "fieldname": "selected_seats",
    "fieldtype": "JSON",
    "label": "Selected Seats"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Data",
+   "label": "payment_method"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Int",
+   "label": "amount"
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Data",
+   "label": "payment_status"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-07-25 20:40:12.392221",
+ "modified": "2024-08-02 15:35:57.048132",
  "modified_by": "Administrator",
  "module": "Movie Tickets",
  "name": "Ticket Booking",
@@ -98,6 +116,7 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
